@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 def home(request):
     return render(request, 'home.html')
-    #return HttpResponse('Hello World')
+    
 def signup(request):
 
     if request.method == 'GET':
