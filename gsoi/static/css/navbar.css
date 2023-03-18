@@ -34,7 +34,7 @@
   .navbar .active,
   .navbar .active:focus,
   .navbar li:hover>a {
-    color:  #4ab849 ;
+    color: white /*#4ab849*/ ;
     
   }
   
@@ -131,7 +131,7 @@
   .navbar-mobile a:hover,
   .navbar-mobile .active,
   .navbar-mobile li:hover>a {
-    color: #17e967;
+    color:rgb(255, 255, 255); /* #17e967;*/
     font-size: 20px;
     /*background-color:  #4ab849 ;*/
    /* border-radius: 25px;*/
