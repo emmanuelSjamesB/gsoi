@@ -70,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'crud.wsgi.application'
+WSGI_APPLICATION = config('WSGI_APPLICATION')
 
 
 # Database
