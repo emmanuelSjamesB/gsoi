@@ -2,11 +2,9 @@
 /*--------------------------------------------------------------
 # Services
 --------------------------------------------------------------*/
-.mycard{
+.mycard {
   border: 3px solid #67d328;
-   
-   
-    transition: all ease-in-out 0.3s;
+  transition: all ease-in-out 0.3s;
 }
  .icon-box {
     text-align: center;
@@ -21,14 +19,7 @@
     justify-content: center;
     
   }
-    .micon {
     
-    width: 32px;
-    height: 32px;
-    border-radius: 4px;
-    display: flex; 
-    transition: 0.3s;
-  }
    .icon {
     margin: 0 auto;
     width: 64px;
