@@ -87,3 +87,10 @@
     box-shadow: 0px 0 25px 0 rgba(0, 0, 0, 0.1);
     transform: translateY(-10px);
   }
+
+  @media only screen and (max-width: 767px) {
+    .mycard,
+    .icon-box {
+      transition: none;
+    }
+  }
