@@ -126,7 +126,25 @@
   margin-top: 40px;
   padding-top: 1rem;
   }
-  
-  .move-right {
-  margin-left: 50px;
+  .hand-icon {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    animation: hand-animation 2s infinite linear;
   }
+  
+  @keyframes hand-animation {
+    0% {
+      right: 0;
+    }
+    100% {
+      right: 10px;
+    }
+  }
+  
+  .hand-icon i {
+    font-size: 2rem;
+    color: #333;
+  }
+  
