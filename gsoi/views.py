@@ -32,11 +32,13 @@ def contact(request):
     num_messages_sent = request.session.get('num_messages_sent', 0)
     
     if request.method == 'POST':
-        if num_messages_sent >= 3 and current_time - last_message_time < 4 * 60 * 60:
+        if num_messages_sent >= 1 and current_time - last_message_time < 4 * 60 * 60:
             # Si se han enviado más de 3 mensajes en las últimas 4 horas, mostrar un mensaje de error
-            messages.error(request, 'Ha superado el límite de mensajes que puede enviar.')
-            return render(request, 'base.html')
-        elif num_messages_sent >= 3:
+            messages.error(request, 'Ha superado el límite de mensajes que puede enviar.', extra_tags='error_limit_message')
+            context = {'error_limit_message': 'Ha superado el límite de mensajes que puede enviar.'}
+            print('excedio el limite de mensajes')
+            return render(request, 'base.html',context=context)
+        elif num_messages_sent >= 1:
             # Si se han enviado más de 3 mensajes pero han pasado más de 4 horas, reiniciar el contador
             num_messages_sent = 0
         
