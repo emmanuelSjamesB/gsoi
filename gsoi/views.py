@@ -21,7 +21,56 @@ def cliente(request):
 def hero(request):
     return render(request, 'hero.html',{})
 
+import time
+
 def contact(request):
+    # Obtener la hora actual
+    current_time = int(time.time())
+    # Obtener la hora en que se envió el último mensaje desde la sesión
+    last_message_time = request.session.get('last_message_time', 0)
+    # Obtener el número de mensajes enviados desde la sesión
+    num_messages_sent = request.session.get('num_messages_sent', 0)
+    
+    if request.method == 'POST':
+        if num_messages_sent >= 3 and current_time - last_message_time < 4 * 60 * 60:
+            # Si se han enviado más de 3 mensajes en las últimas 4 horas, mostrar un mensaje de error
+            messages.error(request, 'Ha superado el límite de mensajes que puede enviar.')
+            return render(request, 'base.html')
+        elif num_messages_sent >= 3:
+            # Si se han enviado más de 3 mensajes pero han pasado más de 4 horas, reiniciar el contador
+            num_messages_sent = 0
+        
+        name = request.POST.get('name', '')
+        email = request.POST.get('email', '')
+        subject = request.POST.get('subject', '')
+        message = request.POST.get('message', '')
+        from_email = settings.EMAIL_HOST_USER
+        if subject and message and from_email and name and email:
+            try:
+                # Renderizamos el cuerpo del mensaje con una plantilla HTML
+                html_content = render_to_string('email_template.html', {'name': name, 'email':email, 'message': message})
+                # Creamos el mensaje
+                msg = EmailMultiAlternatives(subject, '', from_email, [settings.EMAIL_RE])
+                # Agregamos el cuerpo del mensaje HTML y texto plano
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+            except Exception as e:
+                # Si ocurre un error, mostramos un mensaje de error
+                messages.error(request, 'Ocurrió un error al enviar el correo electrónico: ' + str(e))
+            else:
+                # Si todo está bien, mostramos un mensaje de éxito y actualizamos los contadores
+                num_messages_sent += 1
+                request.session['num_messages_sent'] = num_messages_sent
+                request.session['last_message_time'] = current_time
+                messages.success(request, 'El correo electrónico fue enviado correctamente.')
+                return render(request, 'base.html', {'success_message': 'El correo electrónico fue enviado correctamente.'})
+        else:
+            return render(request, 'base.html')
+    else:
+        return render(request, 'base.html')
+
+
+''' ultimo codigo funcionando >> def contact(request):
     if request.method == 'POST':
         name = request.POST.get('name', '')
         email = request.POST.get('email', '')
@@ -47,82 +96,6 @@ def contact(request):
         else:
             return render(request, 'base.html')
     else:
-        return render(request, 'base.html')
-
-
-
-'''
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.core.mail import send_mail, BadHeaderError
-from django.contrib import messages
-from django.conf import settings
-
-def contact(request):
-    if request.method == 'POST':
-        name = request.POST.get('name', '')
-        email = request.POST.get('email', '')
-        subject = request.POST.get('subject', '')
-        message = request.POST.get('message', '')
-        from_email = settings.EMAIL_HOST_USER
-        if subject and message and from_email and name and email:
-            try:
-                message_body = f"Nombre: {name}\nCorreo: {email}\nMensaje: {message}"
-                send_mail(subject, message_body, from_email, [settings.EMAIL_RE])
-            except BadHeaderError:
-                messages.error(request, 'El asunto del correo electrónico es inválido.')
-            except Exception as e:
-                messages.error(request, 'Ocurrió un error al enviar el correo electrónico: ' + str(e))
-            else:
-                messages.success(request, 'El correo electrónico fue enviado correctamente.')
-                return render(request, 'base.html', {'success_message': 'El correo electrónico fue enviado correctamente.'})
-        else:
-            return render(request, 'base.html')
-    else:
         return render(request, 'base.html')'''
 
-'''
-def contact(request):
-    if request.method == 'POST':
-        name = request.POST.get('name', '')
-        email = request.POST.get('email', '')
-        subject = request.POST.get('subject', '')
-        message = request.POST.get('message', '')
-        from_email = EMAIL_HOST_USER
-        if subject and message and from_email and name and email:
-            try:
-                message_body = f"Nombre: {name}\nCorreo: {email}\nMensaje: {message}"
-                send_mail(subject, message_body, from_email, [EMAIL_RE])
-            except BadHeaderError:
-                    messages.error(request, 'El asunto del correo electrónico es inválido.')
-            except Exception as e:
-                    messages.error(request, 'Ocurrió un error al enviar el correo electrónico: ' + str(e))
-            else:
-                messages.success(request, 'El correo electrónico fue enviado correctamente.')
-                return HttpResponse('El correo electrónico fue enviado correctamente.')
-        else:
-            return render(request, '#contact')
-'''
 
-
-
-'''
-def enviar_correo(request):
-    if request.method == 'POST':
-        asunto = request.POST.get('asunto', '')
-        mensaje = request.POST.get('mensaje', '')
-        correo_remitente = request.POST.get('correo_remitente', '')
-        
-
-        try:
-            send_mail(asunto, mensaje, correo_remitente, [EMAIL_RE], fail_silently=False)
-        except BadHeaderError:
-            messages.error(request, 'El asunto del correo electrónico es inválido.')
-        except Exception as e:
-            messages.error(request, 'Ocurrió un error al enviar el correo electrónico: ' + str(e))
-        else:
-            messages.success(request, 'El correo electrónico fue enviado correctamente.')
-            return HttpResponse('El correo electrónico fue enviado correctamente.')
-    else:
-        return render(request, 'formulario_correo.html')
-'''

@@ -17,21 +17,22 @@
             margin-bottom: 20px;
         }
 
-        .mail{
+        .mail h2{
             margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
+            color: aliceblue;
         }
 
         .message{
             text-align: justify;
-            color: #444444;
+            color: #0e0d0d;
         }
 
         .email {
-            background-color: #f9f9f9;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
+            background-color: #eed810;
+            border: 1px solid #e06b0b;
+            border-radius: 25px;
             padding: 20px;
         }
     </style>
@@ -39,8 +40,8 @@
 <body>
     <div class="email">
         <h1>{{ name }}</h1>
-        <p class="mail"><span>Correo electrónico:</span> {{ email }}</p>
-        <p class="message">{{ message }}</p>
+        <h2 class="mail"><span>email :</span> {{ email }}</h2>
+        <p class="message">interest: {{ message }}</p>
     </div>
 </body>
 </html>
